@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-
+  
 /**
  * Survive the wrath of Kutulu
  * Coded fearlessly by JohnnyYuge & nmahoude (ok we might have been a bit scared by the old god...but don't say anything)
@@ -37,7 +37,7 @@ class Player
         //variable
         var rand = new Random();
         bool startG = false;
-        List MobeWanderer = new List<WANDERER>();
+        var MobeWanderer = new List<WANDERER>();
         
         while (true)
         {
@@ -45,19 +45,19 @@ class Player
             for (int i = 0; i < entityCount; i++)
             {
                var line = Console.ReadLine().Split(' ');
-                    var id = int.Parse(line[1]);
+                  var id = int.Parse(line[1]);
                 int x = int.Parse(line[2]);
                 int y = int.Parse(line[3]);
          
                  var entityType = line[0];
              if(entityType == "WANDERER")
              {
-              WANDERER mob = new WANDERER();
-              mob.pos_x = x;
-              mob.pox_y = y;
-              mob.id = id;
-              MobeWanderer.add(mob);
-              
+              var mob = new WANDERER();
+            mob.pos_x = x;
+            mob.pos_y = y;
+            mob.id = id;
+              MobeWanderer.Add(mob);
+
              }
                 
                 }
@@ -80,13 +80,13 @@ class Player
    {
            x_p = rand2.Next(1,width2-1);
             x_y = rand2.Next(1,height2-1);
-     //   Thread.Sleep(1000);
+
             
    }
    }
    class WANDERER
    {
-    int pos_x {get;set;}
-    int pos_y {get;set;}
-    int id {get;set;}
+    public  int pos_x {get;set;}
+   public  int pos_y{get;set;}
+   public  int id{get;set;}
    }
