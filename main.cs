@@ -16,7 +16,9 @@ class Player
 {
         public static int x_p = 1;
           public static  int x_y=1;
-         
+          public static int ChangeX;
+          public static int ChangeY;
+          public static bool CheckStep = false;
     static void Main(string[] args)
     {
         string[] inputs;
@@ -38,7 +40,7 @@ class Player
         var rand = new Random();
         bool startG = false;
         var MobeWanderer = new List<WANDERER>();
-        
+        var MobeExplorer = new List<EXPLORER>();
         while (true)
         {
             int entityCount = int.Parse(Console.ReadLine()); // the first given entity corresponds to your explorer
@@ -59,28 +61,69 @@ class Player
               MobeWanderer.Add(mob);
 
              }
+              if(entityType == "EXPLORER")
+             {
+              var mob = new WANDERER();
+              mob.pos_x = x;
+              mob.pos_y = y;
+              mob.id = id;
+              MobeWanderer.Add(mob);
+
+             }
                 
                 }
             
-                    //обработка препятствий
+                    
            //старт игры
            if(startG == false)
            {
-              Step(rand,width,height);
+              Step(width,height);
            
               startG = true;
               } //конец обработки старта игры
+
+              //обработка препятствий
+              /* foreach (WANDERER  mob in MobeWanderer)
+               {
               
+                 if(MobeExplorer[1].pos_x-1 == mob.pos_x || MobeExplorer[1].pos_x-2 == mob.pos_x)
+                 {
+                      CheckStep = true;
+                      ChangeX = MobeExplorer[1].pos_x + 5;
+                      ChangeY = MobeExplorer[1].pos_y;
+                      Step(rand,1,1);
+                 }
+               }*/
+              
+               foreach (EXPLORER me in MobeExplorer)
+               {
+
+                 if(me.pos_x == x_p && me.pos_y == x_y)
+                  {
+                 Step(width,height);
+                 if(CheckStep)
+                 CheckStep=false;
+                  }
+               }
               
          Console.WriteLine("MOVE "+x_p+" "+x_y);
            
      }   
     }
-   public static void Step(Random rand2,int width2,int height2)
+   public static void Step(int width2,int height2)
    {
+          if(CheckStep==false)
+          {
+            Random rand2 = new Random();
            x_p = rand2.Next(1,width2-1);
             x_y = rand2.Next(1,height2-1);
+          }
+          else if(CheckStep)
+          {
+              x_p = ChangeX;
+              x_y = ChangeY;
 
+          }
             
    }
    }
@@ -90,3 +133,10 @@ class Player
    public  int pos_y{get;set;}
    public  int id{get;set;}
    }
+     class EXPLORER
+   {
+    public  int pos_x {get;set;}
+   public  int pos_y{get;set;}
+   public  int id{get;set;}
+   }          
+ 
