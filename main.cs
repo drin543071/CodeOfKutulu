@@ -1,6 +1,4 @@
 
-
-
 using System;
 using System.Linq;
 using System.IO;
@@ -15,19 +13,47 @@ using System.Collections.Generic;
 class Player
 {
         public static int x_p = 1;
-          public static  int x_y=1;
-          public static int ChangeX;
-          public static int ChangeY;
+          public static  int y_p=1;
+    
           public static bool CheckStep = false;
     static void Main(string[] args)
     {
         string[] inputs;
         int width = int.Parse(Console.ReadLine());
         int height = int.Parse(Console.ReadLine());
+           var maps = new List<Maps>();      
         for (int i = 0; i < height; i++)
         {
             string line = Console.ReadLine();
+       
+            for(int j=0; j< line.Length; j++)
+            {
+                 switch(line[j])
+            {
+                case '.':
+                    {
+                      var cube = new Maps();
+                      cube.s = "."; //empty
+                      cube.x = j;
+                      cube.y = i;
+                      maps.Add(cube);
+                    }break;
+                case '#': {
+                      var cube = new Maps();
+                      cube.s = "#"; //wall
+                      cube.x = j;
+                      cube.y = i;
+                      maps.Add(cube);
+                    }break;
+                case 'w':
+                    {}break;
+                case 'U':
+                        {}break;
+            }
+            }
+            
         }
+
         inputs = Console.ReadLine().Split(' ');
         int sanityLossLonely = int.Parse(inputs[0]); // how much sanity you lose every turn when alone, always 3 until wood 1
         int sanityLossGroup = int.Parse(inputs[1]); // how much sanity you lose every turn when near another player, always 1 until wood 1
@@ -37,10 +63,11 @@ class Player
         // game loop
         
         //variable
-        var rand = new Random();
+     
         bool startG = false;
         var MobeWanderer = new List<WANDERER>();
         var MobeExplorer = new List<EXPLORER>();
+       
         while (true)
         {
             int entityCount = int.Parse(Console.ReadLine()); // the first given entity corresponds to your explorer
@@ -52,6 +79,9 @@ class Player
                 int y = int.Parse(line[3]);
          
                  var entityType = line[0];
+            
+
+
              if(entityType == "WANDERER")
              {
               var mob = new WANDERER();
@@ -63,11 +93,11 @@ class Player
              }
               if(entityType == "EXPLORER")
              {
-              var mob = new WANDERER();
-              mob.pos_x = x;
-              mob.pos_y = y;
-              mob.id = id;
-              MobeWanderer.Add(mob);
+              var mobE = new EXPLORER();
+              mobE.pos_x = x;
+              mobE.pos_y = y;
+              mobE.id = id;
+              MobeExplorer.Add(mobE);
 
              }
                 
@@ -76,57 +106,32 @@ class Player
                     
            //старт игры
            if(startG == false)
-           {
-              Step(width,height);
-           
-              startG = true;
+           { 
+            x_p = 1;
+            y_p = 1;
+            startG = true;
               } //конец обработки старта игры
 
               //обработка препятствий
-              /* foreach (WANDERER  mob in MobeWanderer)
-               {
+            
               
-                 if(MobeExplorer[1].pos_x-1 == mob.pos_x || MobeExplorer[1].pos_x-2 == mob.pos_x)
-                 {
-                      CheckStep = true;
-                      ChangeX = MobeExplorer[1].pos_x + 5;
-                      ChangeY = MobeExplorer[1].pos_y;
-                      Step(rand,1,1);
-                 }
-               }*/
-              
-               foreach (EXPLORER me in MobeExplorer)
-               {
-
-                 if(me.pos_x == x_p && me.pos_y == x_y)
-                  {
-                 Step(width,height);
-                 if(CheckStep)
-                 CheckStep=false;
-                  }
-               }
-              
-         Console.WriteLine("MOVE "+x_p+" "+x_y);
+             
+              if(startG&&CheckStep==false)
+              {
+                Console.WriteLine("MOVE "+x_p+" "+y_p);
+         }else if(startG&&CheckStep){
+              Console.WriteLine("WAIT");
+         }
            
      }   
+ 
     }
-   public static void Step(int width2,int height2)
+   public static void Step()
    {
-          if(CheckStep==false)
-          {
-            Random rand2 = new Random();
-           x_p = rand2.Next(1,width2-1);
-            x_y = rand2.Next(1,height2-1);
-          }
-          else if(CheckStep)
-          {
-              x_p = ChangeX;
-              x_y = ChangeY;
-
-          }
+         
             
    }
-   }
+   
    class WANDERER
    {
     public  int pos_x {get;set;}
@@ -138,5 +143,12 @@ class Player
     public  int pos_x {get;set;}
    public  int pos_y{get;set;}
    public  int id{get;set;}
-   }          
+   }    
+   class Maps
+   {
+   public int x {get;set;}
+   public int y {get;set;}
+   public string s {get;set;}
+   }      
  
+}
